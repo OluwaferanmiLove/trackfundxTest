@@ -28,6 +28,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "trackfundx recruitment task",
+    "githubUrl": "https://github.com/OluwaferanmiLove/trackfundxTest.git"
   }
 }

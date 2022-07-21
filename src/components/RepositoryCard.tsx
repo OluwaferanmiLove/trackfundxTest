@@ -10,6 +10,8 @@ import ProfileInfo from "../screens/Profile/components/ProfileInfo";
 interface RepositoryCardProps {
   value?: string;
   title?: string;
+  image?: string;
+  user?: string;
   showImage?: boolean;
   stars?: string;
   marginTop?: number;
@@ -21,6 +23,8 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
   value,
   title,
   showImage,
+  image,
+  user,
   stars = '0',
   marginTop = 0,
   marginLeft = 0,
@@ -32,12 +36,12 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
       {showImage && (
         <UserInfo>
           <ImageView
-            source={{ uri: "https://picsum.photos/500" }}
+            source={{ uri: image }}
             width={wp(24)}
             height={wp(24)}
           />
           <Text
-            value={"sdras"}
+            value={user}
             fontSize={wp(12)}
             fontWeight={"400"}
             marginLeft={wp(6)}

@@ -162,6 +162,9 @@ function Profile({navigation}: any) {
               renderItem={({ item, index }: any) => (
                 <RepositoryCard
                   title={item.name}
+                  showImage
+                  image={item.owner.avatar_url}
+                  user={item.owner.login}
                   value={item.description}
                   stars={item.stargazers_count}
                   marginLeft={index !== 0 ? wp(10) : wp(20)}
