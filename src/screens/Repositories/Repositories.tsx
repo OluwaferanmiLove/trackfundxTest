@@ -1,48 +1,73 @@
 import React, { useState } from "react";
 import styled from "styled-components/native";
 import Base from "../../components/Base";
-import Button from "../../components/Button";
 import Header from "../../components/Header";
-import ImageView from "../../components/ImageView";
 import RepoListView from "../../components/RepoListView";
-import RepositoryCard from "../../components/RepositoryCard";
 import Text from "../../components/Text";
 import { colors } from "../../constants/colors";
-import { useGetOrganizationQuery, useGetRepoQuery, useGetStarredQuery, useGetUserQuery } from "../../redux/UserApi";
+import { useGetRepoQuery, useGetStarredQuery } from "../../redux/UserApi";
 import { hp, wp } from "../../utils/responsive-dimension";
 
-function Repositories({navigation} : any) {
-  const { data, isError, error, isLoading } = useGetRepoQuery();
+function Repositories({ navigation, route }: any) {
+  const { data,
+    isError,
+    error,
+    isLoading
+  } = useGetRepoQuery();
+
+  const {
+    data: starredRepo,
+    isError: isStarredRepoError,
+    error: starredRepoError,
+    isLoading: isStarredRepoLoading
+  } = useGetStarredQuery();
+
+  const getRepos = () => {
+    let repoData: string[] = [];
+
+    if (route?.params?.title === 'Repositories') {
+      repoData = data;
+    }
+
+    if (route?.params?.title === 'Starred') {
+      repoData = starredRepo;
+    }
+
+    return repoData;
+  }
 
   return (
     <Base bgColor={colors.mainBg}>
       <Header
         leftText={'Back'}
         onPressLeft={() => navigation.goBack()}
-        title={'Repositories'} />
-      {isLoading && <Loading size={"large"} color={colors.primary} />}
-      {isError && (
+        title={route?.params?.title} />
+      {isLoading || isStarredRepoLoading && (
+        <Loading size={"large"} color={colors.primary} />
+      )}
+      {isError || isStarredRepoError && (
         <Error>
           <Text
-            value={'error' in error ? error.error : 'Somethin went wrong'}
+            value={'Somethin went wrong'}
             marginTop={hp(18)}
             fontSize={wp(14)}
             fontWeight={"400"}
             color={colors.grayText} />
         </Error>
       )}
-      {!isLoading && !isError && (
+      {!isLoading && !isError && !isStarredRepoLoading && !isStarredRepoError && (
         <Content>
           <PinnedContainer>
             <PinnedRepo
-              data={data}
+              data={getRepos()}
               showsHorizontalScrollIndicator={false}
+              maxToRenderPerBatch={30}
               renderItem={({ item, index }: any) => (
                 <RepoListView
                   title={item.name}
                   value={item.description}
                   stars={item.stargazers_count}
-                  // marginLeft={index !== 0 ? wp(10) : wp(20)}
+                // marginLeft={index !== 0 ? wp(10) : wp(20)}
                 />
               )}
               keyExtractor={(item: any) => item.id.toString()}

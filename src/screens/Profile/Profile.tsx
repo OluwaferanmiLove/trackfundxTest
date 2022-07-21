@@ -122,13 +122,18 @@ function Profile({navigation}: any) {
               value={data?.public_repos}
               title={"Repositories"}
               iconName={"repo"}
-              onPress={() => navigation.navigate('Repositories')}
+              onPress={() => navigation.navigate('Repositories', {
+                title: 'Repositories'
+              })}
             />
             <RepoContentButton
               iconContainerBgColor="#F1C746"
               value={starredRepo?.length}
               title={"Starred"}
               iconName={"star"}
+              onPress={() => navigation.navigate('Repositories', {
+                title: 'Starred'
+              })}
             />
             <RepoContentButton
               iconContainerBgColor="#EB8B46"
@@ -215,7 +220,7 @@ const PinnedContainer = styled.View`
 
 const PinnedRepo = styled.FlatList`
   flex: 1;
-  margin-top: ${hp(10)};
+  margin-top: ${hp(10)}px;
   margin-left: -${wp(20)}px;
   margin-right: -${wp(20)}px;
 `;
