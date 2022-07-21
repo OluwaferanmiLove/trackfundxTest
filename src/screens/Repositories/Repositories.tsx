@@ -67,6 +67,7 @@ function Repositories({ navigation, route }: any) {
                   title={item.name}
                   value={item.description}
                   stars={item.stargazers_count}
+                  language={item.language}
                 // marginLeft={index !== 0 ? wp(10) : wp(20)}
                 />
               )}
