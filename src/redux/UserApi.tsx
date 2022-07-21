@@ -8,8 +8,21 @@ export const userApi = createApi({
     getUser: builder.query<UserModel, void>({
       query: () => "/sdras",
     }),
-    // getStarred: builder.query<
+    getStarred: builder.query<any, void>({
+      query: () => "/sdras/starred",
+    }),
+    getRepo: builder.query<any, void>({
+      query: () => "/sdras/repos?per_page=100&sort=updated",
+    }),
+    getOrganization: builder.query<any, void>({
+      query: () => "/sdras/orgs",
+    })
   }),
 });
 
-export const { useGetUserQuery } = userApi;
+export const {
+  useGetUserQuery,
+  useGetStarredQuery,
+  useGetOrganizationQuery,
+  useGetRepoQuery
+} = userApi;

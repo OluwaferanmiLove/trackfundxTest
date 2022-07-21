@@ -7,21 +7,31 @@ import ImageView from "../../components/ImageView";
 import RepositoryCard from "../../components/RepositoryCard";
 import Text from "../../components/Text";
 import { colors } from "../../constants/colors";
-import { useGetUserQuery } from "../../redux/UserApi";
+import { useGetOrganizationQuery, useGetStarredQuery, useGetUserQuery } from "../../redux/UserApi";
 import { hp, wp } from "../../utils/responsive-dimension";
 import ProfileInfo from "./components/ProfileInfo";
 import RepoContentButton from "./components/RepoContentButton";
 
-function Profile() {
+function Profile({navigation}: any) {
   const { data, isError, error, isLoading } = useGetUserQuery();
-
-  console.log(data);
+  const { data: starredRepo, isLoading: starredRepoLoading } = useGetStarredQuery();
+  const { data: orgs, isLoading: orgsLoading } = useGetOrganizationQuery();
 
   return (
     <Base bgColor={colors.mainBg}>
-      <Header />
-      {isLoading && <Loading size={"large"} color={colors.primary} />}
-      {!isLoading && (
+      <Header leftText={'Home'} />
+      {isLoading && starredRepoLoading && <Loading size={"large"} color={colors.primary} />}
+      {isError && !starredRepoLoading && (
+        <Error>
+          <Text
+            value={'error' in error ? error.error : 'Somethin went wrong'}
+            marginTop={hp(18)}
+            fontSize={wp(14)}
+            fontWeight={"400"}
+            color={colors.grayText} />
+        </Error>
+      )}
+      {!isLoading && !starredRepoLoading && !isError && (
         <Content>
           <TopContent>
             <UserInfoContainer>
@@ -112,22 +122,23 @@ function Profile() {
               value={data?.public_repos}
               title={"Repositories"}
               iconName={"repo"}
+              onPress={() => navigation.navigate('Repositories')}
             />
             <RepoContentButton
               iconContainerBgColor="#F1C746"
-              value={344}
+              value={starredRepo?.length}
               title={"Starred"}
               iconName={"star"}
             />
             <RepoContentButton
               iconContainerBgColor="#EB8B46"
-              value={3}
+              value={orgs?.length}
               title={"Organizations"}
               iconName={"organization"}
             />
             <RepoContentButton
               iconContainerBgColor="#D856A7"
-              value={11}
+              value={'-'}
               title={"Sponsoring"}
               iconName={"heart"}
             />
@@ -141,17 +152,17 @@ function Profile() {
             />
             <PinnedRepo
               horizontal
-              data={DATA}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-            />
-            <RepositoryCard marginTop={hp(12)} />
-            <ProfileInfo
-              iconName={"info"}
-              title={"sdras/README.md"}
-              fontWeight={"400"}
-              textMarginLeft={wp(18)}
-              marginTop={hp(50)}
+              data={starredRepo}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }: any) => (
+                <RepositoryCard
+                  title={item.name}
+                  value={item.description}
+                  stars={item.stargazers_count}
+                  marginLeft={index !== 0 ? wp(10) : wp(20)}
+                />
+              )}
+              keyExtractor={(item: any) => item.id.toString()}
             />
           </PinnedContainer>
         </Content>
@@ -204,10 +215,19 @@ const PinnedContainer = styled.View`
 
 const PinnedRepo = styled.FlatList`
   flex: 1;
+  margin-top: ${hp(10)};
+  margin-left: -${wp(20)}px;
+  margin-right: -${wp(20)}px;
 `;
 
 const Loading = styled.ActivityIndicator`
   flex: 1;
+`;
+
+const Error = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default Profile;

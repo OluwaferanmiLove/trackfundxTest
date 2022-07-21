@@ -8,7 +8,7 @@ import Text from "../../../components/Text";
 
 interface RepoButtonProps {
   iconName?: keyof typeof Octicons.glyphMap;
-  value?: number;
+  value?: number | any;
   iconContainerBgColor?: string;
   title?: string;
   marginTop?: number;

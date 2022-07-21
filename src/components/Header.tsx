@@ -4,19 +4,22 @@ import { Octicons } from "@expo/vector-icons";
 import { hp, wp } from "../utils/responsive-dimension";
 import styled from "styled-components/native";
 import Constants from "expo-constants";
+import { GestureResponderEvent } from "react-native";
 
 const statusBarHeight = Constants.statusBarHeight;
 
 interface HeaderProps {
   title?: string;
+  onPressLeft?: (event: GestureResponderEvent) => void;
+  leftText?: string;
 }
 
-function Header({ title }: HeaderProps) {
+function Header({ title, onPressLeft, leftText }: HeaderProps) {
   return (
     <HeaderContainer>
-      <LeftComponent>
+      <LeftComponent onPress={onPressLeft}>
         <Octicons name={"chevron-left"} size={hp(24)} color={colors.primary} />
-        <LeftText>Home</LeftText>
+        <LeftText>{leftText}</LeftText>
       </LeftComponent>
       <MiddleComponent>
         <MiddleText>{title}</MiddleText>
@@ -57,16 +60,17 @@ const LeftText = styled.Text`
 `;
 
 const MiddleComponent = styled.View`
-  flex: 0.2;
+  flex: 0.7;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 `;
 
 const MiddleText = styled.Text`
-  font-size: ${wp(14)}px;
+  font-size: ${wp(16)}px;
   margin-left: ${wp(6)}px;
-  color: ${colors.primary};
+  font-weight: bold;
+  color: ${colors.black};
 `;
 
 const RightComponent = styled.TouchableOpacity`

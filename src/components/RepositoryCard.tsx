@@ -10,6 +10,8 @@ import ProfileInfo from "../screens/Profile/components/ProfileInfo";
 interface RepositoryCardProps {
   value?: string;
   title?: string;
+  showImage?: boolean;
+  stars?: string;
   marginTop?: number;
   marginLeft?: number;
   onPress?: (event: GestureResponderEvent) => void;
@@ -18,6 +20,8 @@ interface RepositoryCardProps {
 const RepositoryCard: React.FC<RepositoryCardProps> = ({
   value,
   title,
+  showImage,
+  stars = '0',
   marginTop = 0,
   marginLeft = 0,
   onPress,
@@ -25,32 +29,31 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
 }) => {
   return (
     <Container onPress={onPress} marginTop={marginTop} marginLeft={marginLeft}>
-      <UserInfo>
-        <ImageView
-          source={{ uri: "https://picsum.photos/500" }}
-          width={wp(24)}
-          height={wp(24)}
-        />
-        <Text
-          value={"sdras"}
-          fontSize={wp(12)}
-          fontWeight={"400"}
-          marginLeft={wp(6)}
-          color={colors.grayText}
-        />
-      </UserInfo>
+      {showImage && (
+        <UserInfo>
+          <ImageView
+            source={{ uri: "https://picsum.photos/500" }}
+            width={wp(24)}
+            height={wp(24)}
+          />
+          <Text
+            value={"sdras"}
+            fontSize={wp(12)}
+            fontWeight={"400"}
+            marginLeft={wp(6)}
+            color={colors.grayText}
+          />
+        </UserInfo>)}
       <Text
-        value={"awesome-actions"}
+        value={title}
         fontSize={wp(14)}
         fontWeight={"700"}
-        marginTop={wp(12)}
+        marginTop={showImage ? wp(12) : 0}
         color={colors.grayText}
       />
       <OtherInfo>
         <Text
-          value={
-            "Accurate dlist of awesomeactions to use on github platform, Accurate dlist of awesomeactions to use, Accurate dlist of awesomeactions to use"
-          }
+          value={value}
           fontSize={wp(14)}
           fontWeight={"400"}
           // marginTop={wp(12)}
@@ -60,9 +63,9 @@ const RepositoryCard: React.FC<RepositoryCardProps> = ({
       </OtherInfo>
       <ProfileInfo
         iconName={"star"}
-        title={"19,154"}
+        title={stars}
         fontWeight={"400"}
-        marginTop={hp(20)}
+        marginTop={hp(14)}
       />
     </Container>
   );
