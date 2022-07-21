@@ -117,7 +117,7 @@ const LanguageView = styled.View<LanguageView>`
     height: ${wp(8)}px;
     width: ${wp(8)}px;
     margin-left: ${wp(10)}px;
-    border-radius: 99999;
+    border-radius: 99999px;
     background-color: ${props => props.color};
 `
 

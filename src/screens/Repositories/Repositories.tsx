@@ -42,9 +42,9 @@ function Repositories({ navigation, route }: any) {
         leftText={'Back'}
         onPressLeft={() => navigation.goBack()}
         title={route?.params?.title} />
-      {isLoading || isStarredRepoLoading && (
+      {isLoading || isStarredRepoLoading ? (
         <Loading size={"large"} color={colors.primary} />
-      )}
+      ) : null}
       {isError || isStarredRepoError && (
         <Error>
           <Text
